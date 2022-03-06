@@ -1,11 +1,14 @@
 package main
 
 import (
-    "os/exec"
+    "errors"
     "flag"
     "fmt"
+    "io"
     "log"
+    "net/http"
     "os"
+    "os/exec"
     "strings"
     "time"
 
@@ -33,6 +36,12 @@ func main() {
             continue
         }
 
+        cover_image_file_name := strings.ReplaceAll(article.Title, " ", "_") + ".jpg"
+        err = downloadFile(article.Image, cover_image_file_name)
+        if err != nil {
+            log.Fatal(err)
+        }
+
         cmd := exec.Command(
             "pandoc",
 			"-f",
@@ -45,6 +54,8 @@ func main() {
             fmt.Sprintf("title: %s", article.Title),
             "--metadata",
             fmt.Sprintf("author: %s", article.Byline),
+            "--epub-cover-image",
+            cover_image_file_name,
 			"article.html",
         )
 
@@ -63,4 +74,30 @@ func main() {
             fmt.Printf("Successfully converted %s\n", article.Title)
         }
     }
+}
+
+func downloadFile(url string, filename string) error {
+    response, err := http.Get(url)
+    if err != nil {
+        return err
+    }
+
+    defer response.Body.Close()
+
+    if response.StatusCode != 200 {
+        return errors.New(fmt.Sprintf("Request did not succeed. Response code: %d", response.StatusCode))
+    }
+
+    file, err := os.Create(filename)
+    if err != nil {
+        return err
+    }
+
+    defer file.Close()
+    _, err = io.Copy(file, response.Body)
+    if err != nil {
+        return nil
+    }
+
+    return nil
 }
