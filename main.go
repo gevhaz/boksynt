@@ -35,6 +35,15 @@ func main() {
 
     flag.Parse()
 
+    if outputDir != currentDirectory {
+        err = os.Mkdir(outputDir, 0755)
+        if err != nil {
+            log.Fatal(err)
+        } else {
+            log.Printf("Successfully created directory '%s'", outputDir)
+        }
+    }
+
     urlData, err := os.ReadFile(urlsFilePath)
     if err != nil {
         log.Fatal(err)
@@ -49,9 +58,8 @@ func main() {
     defer os.RemoveAll(tempDir)
 
     for i, url := range urls {
-        if i > 0 {
-            fmt.Println("")
-        }
+        fmt.Println("")
+
         log.Printf("Processing URL number %01d: %s\n", i+1, url)
 
         article, err := readability.FromURL(url, 30 * time.Second)
@@ -61,10 +69,10 @@ func main() {
         }
 
         articleSafeName := strings.ReplaceAll(strings.ToLower(article.Title), " ", "_")
-        epubName := articleSafeName + ".epub"
+        epubPath := filepath.Join(outputDir, articleSafeName + ".epub")
 
-        if fileExists(epubName) {
-            log.Printf(colorWarning + "A file with the name '%s' already exists, skipping" + colorReset, epubName)
+        if fileExists(epubPath) {
+            log.Printf(colorWarning + "The file with the name '%s' already exists, skipping" + colorReset, epubPath)
             continue
         }
 
@@ -89,7 +97,7 @@ func main() {
 			"-t",
 			"epub",
 			"-o",
-            epubName,
+            epubPath,
             "--metadata",
             fmt.Sprintf("title: %s", article.Title),
             "--metadata",
@@ -101,10 +109,10 @@ func main() {
 
         err = cmd.Run()
         if err != nil {
-            log.Fatalf(colorError + "Error converting %s\n" + colorReset, article.Title)
+            log.Fatalf(colorError + "Error converting '%s'" + colorReset + "\n", article.Title)
             log.Fatal(err)
         } else {
-            log.Printf(colorOk + "Successfully converted %s\n" + colorReset, article.Title)
+            log.Printf(colorOk + "Successfully converted '%s'" + colorReset + "\n", article.Title)
         }
     }
 }
