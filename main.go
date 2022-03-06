@@ -1,6 +1,7 @@
 package main
 
 import (
+    "os/exec"
     "flag"
     "fmt"
     "log"
@@ -29,8 +30,37 @@ func main() {
         article, err := readability.FromURL(url, 30 * time.Second)
         if err != nil {
             log.Fatalf("Failed to parse url: %s\n%v\n", url, err)
+            continue
         }
 
-        fmt.Println(article.Title)
+        cmd := exec.Command(
+            "pandoc",
+			"-f",
+			"html",
+			"-t",
+			"epub",
+			"-o",
+			"article.epub",
+            "--metadata",
+            fmt.Sprintf("title: %s", article.Title),
+            "--metadata",
+            fmt.Sprintf("author: %s", article.Byline),
+			"article.html",
+        )
+
+        html_file, err := os.Create("article.html")
+        if err != nil {
+            log.Fatal(err)
+        }
+        defer html_file.Close()
+        html_file.WriteString(article.Content)
+
+        err = cmd.Run()
+        if err != nil {
+            fmt.Printf("Error converting %s\n", article.Title)
+            log.Fatal(err)
+        } else {
+            fmt.Printf("Successfully converted %s\n", article.Title)
+        }
     }
 }
