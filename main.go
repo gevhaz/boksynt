@@ -52,6 +52,13 @@ func main() {
         }
 
         articleSafeName := strings.ReplaceAll(strings.ToLower(article.Title), " ", "_")
+        epubName := articleSafeName + ".epub"
+
+        if fileExists(epubName) {
+            log.Printf(colorWarning + "A file with the name '%s' already exists, skipping" + colorReset, epubName)
+            continue
+        }
+
         coverImagePath := filepath.Join(tempDir, articleSafeName + ".jpg")
         err = downloadFile(article.Image, coverImagePath)
         if err != nil {
@@ -73,7 +80,7 @@ func main() {
 			"-t",
 			"epub",
 			"-o",
-            (articleSafeName + ".epub"),
+            epubName,
             "--metadata",
             fmt.Sprintf("title: %s", article.Title),
             "--metadata",
@@ -117,4 +124,14 @@ func downloadFile(url string, filename string) error {
     }
 
     return nil
+}
+
+// Takes a string and checks whether the path it represents is a file or
+// directory, in which case true is returned, otherwise false is returned.
+func fileExists(path string) bool {
+    _, err := os.Stat(path)
+    if os.IsNotExist(err) {
+        return false
+    }
+    return true
 }
