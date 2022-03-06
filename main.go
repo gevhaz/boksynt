@@ -9,6 +9,7 @@ import (
     "net/http"
     "os"
     "os/exec"
+    "path/filepath"
     "strings"
     "time"
 
@@ -27,6 +28,12 @@ func main() {
 
     urls := strings.Split(strings.Trim(string(urlData), "\n"), "\n")
 
+    tempDir, err := os.MkdirTemp("", "boksynt")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer os.RemoveAll(tempDir)
+
     for i, url := range urls {
         fmt.Printf("Processing URL number %01d: %s\n", i+1, url)
 
@@ -36,11 +43,20 @@ func main() {
             continue
         }
 
-        coverImageFileName := strings.ReplaceAll(article.Title, " ", "_") + ".jpg"
-        err = downloadFile(article.Image, coverImageFileName)
+        articleSafeName := strings.ReplaceAll(strings.ToLower(article.Title), " ", "_")
+        coverImagePath := filepath.Join(tempDir, articleSafeName + ".jpg")
+        err = downloadFile(article.Image, coverImagePath)
         if err != nil {
             log.Fatal(err)
         }
+
+        htmlPath := filepath.Join(tempDir, articleSafeName + ".html")
+        htmlFile, err := os.Create(htmlPath)
+        if err != nil {
+            log.Fatal(err)
+        }
+        defer htmlFile.Close()
+        htmlFile.WriteString(article.Content)
 
         cmd := exec.Command(
             "pandoc",
@@ -49,22 +65,15 @@ func main() {
 			"-t",
 			"epub",
 			"-o",
-			"article.epub",
+            (articleSafeName + ".epub"),
             "--metadata",
             fmt.Sprintf("title: %s", article.Title),
             "--metadata",
             fmt.Sprintf("author: %s", article.Byline),
             "--epub-cover-image",
-            coverImageFileName,
-			"article.html",
+            coverImagePath,
+            htmlPath,
         )
-
-        htmlFile, err := os.Create("article.html")
-        if err != nil {
-            log.Fatal(err)
-        }
-        defer htmlFile.Close()
-        htmlFile.WriteString(article.Content)
 
         err = cmd.Run()
         if err != nil {
