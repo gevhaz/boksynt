@@ -1,7 +1,31 @@
 # boksynt
 
-_boksynt_ will be a CLI tool for downloading and converting articles to
-epub format so that they can be put on an ebook reader or just read
-without any clutter and offline in your favorite epub reading software.
+_boksynt_ is a simple CLI tool for downloading and converting articles to the EPUB format so that they can be put on an
+e-book reader or just read without any clutter and offline in your favorite EPUB reading software.
 
-It is at the moment work in progress.
+# Installation
+
+1. Clone this repo.
+2. You can immediately use it with `go run main.go`.
+
+# Usage
+
+The following flags are available:
+
+```
+-file string
+      Path to file with URLs to articles to be fetched and converted
+-output-dir string
+      Directory where the final epub files should be placed (default "/home/simon/src/boksynt")
+```
+
+The flow is:
+
+1. Create a file with URLs that you want downloaded and converted.
+2. Run the app and provide the path to your file to the `-file` flag.
+
+# Development status
+
+This is a work in progress, but the basic functionality is there. Third-party software ([Mozilla
+Readability](https://github.com/mozilla/readability)) handles the actual parsing of websites, so that part should be
+pretty mature.
