@@ -22,8 +22,17 @@ func main() {
     colorWarning := "\033[33m"
     colorReset := "\033[0m"
 
+    currentDirectory, err := os.Getwd()
+    if err != nil {
+        log.Fatal(err)
+    }
+
     var urlsFilePath string
+    var outputDir string
+
     flag.StringVar(&urlsFilePath, "file", "", "Path to file with URLs to articles to be fetched and converted")
+    flag.StringVar(&outputDir, "output-dir", currentDirectory, "Directory where the final epub files should be placed")
+
     flag.Parse()
 
     urlData, err := os.ReadFile(urlsFilePath)
