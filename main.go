@@ -16,16 +16,16 @@ import (
 )
 
 func main() {
-    var urls_file_path string
-    flag.StringVar(&urls_file_path, "file", "", "Path to file with URLs to articles to be fetched and converted")
+    var urlsFilePath string
+    flag.StringVar(&urlsFilePath, "file", "", "Path to file with URLs to articles to be fetched and converted")
     flag.Parse()
 
-    url_data, err := os.ReadFile(urls_file_path)
+    urlData, err := os.ReadFile(urlsFilePath)
     if err != nil {
         log.Fatal(err)
     }
 
-    urls := strings.Split(strings.Trim(string(url_data), "\n"), "\n")
+    urls := strings.Split(strings.Trim(string(urlData), "\n"), "\n")
 
     for i, url := range urls {
         fmt.Printf("Processing URL number %01d: %s\n", i+1, url)
@@ -36,8 +36,8 @@ func main() {
             continue
         }
 
-        cover_image_file_name := strings.ReplaceAll(article.Title, " ", "_") + ".jpg"
-        err = downloadFile(article.Image, cover_image_file_name)
+        coverImageFileName := strings.ReplaceAll(article.Title, " ", "_") + ".jpg"
+        err = downloadFile(article.Image, coverImageFileName)
         if err != nil {
             log.Fatal(err)
         }
@@ -55,16 +55,16 @@ func main() {
             "--metadata",
             fmt.Sprintf("author: %s", article.Byline),
             "--epub-cover-image",
-            cover_image_file_name,
+            coverImageFileName,
 			"article.html",
         )
 
-        html_file, err := os.Create("article.html")
+        htmlFile, err := os.Create("article.html")
         if err != nil {
             log.Fatal(err)
         }
-        defer html_file.Close()
-        html_file.WriteString(article.Content)
+        defer htmlFile.Close()
+        htmlFile.WriteString(article.Content)
 
         err = cmd.Run()
         if err != nil {
