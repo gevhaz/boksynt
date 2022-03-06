@@ -8,6 +8,11 @@ e-book reader or just read without any clutter and offline in your favorite EPUB
 1. Clone this repo.
 2. You can immediately use it with `go run main.go`.
 
+# Requirements
+
+You need to have [pandoc](https://github.com/jgm/pandoc/) installed for _boksynt_ to work. Other dependencies are
+specified in `go.mod` and should be handled automatically.
+
 # Usage
 
 The following flags are available:
