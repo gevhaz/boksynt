@@ -17,6 +17,11 @@ import (
 )
 
 func main() {
+    colorError := "\033[31m"
+    colorOk := "\033[32m"
+    colorWarning := "\033[33m"
+    colorReset := "\033[0m"
+
     var urlsFilePath string
     flag.StringVar(&urlsFilePath, "file", "", "Path to file with URLs to articles to be fetched and converted")
     flag.Parse()
@@ -35,7 +40,10 @@ func main() {
     defer os.RemoveAll(tempDir)
 
     for i, url := range urls {
-        fmt.Printf("Processing URL number %01d: %s\n", i+1, url)
+        if i > 0 {
+            fmt.Println("")
+        }
+        log.Printf("Processing URL number %01d: %s\n", i+1, url)
 
         article, err := readability.FromURL(url, 30 * time.Second)
         if err != nil {
@@ -77,10 +85,10 @@ func main() {
 
         err = cmd.Run()
         if err != nil {
-            fmt.Printf("Error converting %s\n", article.Title)
+            log.Fatalf(colorError + "Error converting %s\n" + colorReset, article.Title)
             log.Fatal(err)
         } else {
-            fmt.Printf("Successfully converted %s\n", article.Title)
+            log.Printf(colorOk + "Successfully converted %s\n" + colorReset, article.Title)
         }
     }
 }
