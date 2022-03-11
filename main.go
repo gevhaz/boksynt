@@ -37,7 +37,9 @@ func main() {
 
     if outputDir != currentDirectory {
         err = os.Mkdir(outputDir, 0755)
-        if err != nil {
+        if os.IsExist(err) {
+            log.Printf("Writing output into existing directory: %s", outputDir)
+        } else if err != nil {
             log.Fatal(err)
         } else {
             log.Printf("Successfully created directory '%s'", outputDir)
@@ -72,7 +74,7 @@ func main() {
         epubPath := filepath.Join(outputDir, articleSafeName + ".epub")
 
         if fileExists(epubPath) {
-            log.Printf(colorWarning + "The file with the name '%s' already exists, skipping" + colorReset, epubPath)
+            log.Printf(colorWarning + "A file with the name '%s' already exists, skipping" + colorReset, epubPath)
             continue
         }
 
