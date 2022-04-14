@@ -29,9 +29,11 @@ func main() {
 
     var urlsFilePath string
     var outputDir string
+    var articleTag string
 
     flag.StringVar(&urlsFilePath, "file", "", "Path to file with URLs to articles to be fetched and converted")
     flag.StringVar(&outputDir, "output-dir", currentDirectory, "Directory where the final epub files should be placed")
+    flag.StringVar(&articleTag, "tag", "", "Comma separated list of tags that should be added to articles")
 
     flag.Parse()
 
@@ -104,6 +106,8 @@ func main() {
             fmt.Sprintf("title: %s", article.Title),
             "--metadata",
             fmt.Sprintf("author: %s", article.Byline),
+            "--metadata",
+            fmt.Sprintf("subject: %s", articleTag),
             "--epub-cover-image",
             coverImagePath,
             htmlPath,
