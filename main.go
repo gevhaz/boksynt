@@ -66,27 +66,27 @@ func main() {
 
 		log.Printf("Processing URL number %01d: %s\n", i+1, url)
 
-		article, err := readability.FromURL(url, 30 * time.Second)
+		article, err := readability.FromURL(url, 30*time.Second)
 		if err != nil {
 			log.Fatalf("Failed to parse url: %s\n%v\n", url, err)
 			continue
 		}
 
 		articleSafeName := strings.ReplaceAll(strings.ToLower(article.Title), " ", "_")
-		epubPath := filepath.Join(outputDir, articleSafeName + ".epub")
+		epubPath := filepath.Join(outputDir, articleSafeName+".epub")
 
 		if fileExists(epubPath) {
-			log.Printf(colorWarning + "A file with the name '%s' already exists, skipping" + colorReset, epubPath)
+			log.Printf(colorWarning+"A file with the name '%s' already exists, skipping"+colorReset, epubPath)
 			continue
 		}
 
-		coverImagePath := filepath.Join(tempDir, articleSafeName + ".jpg")
+		coverImagePath := filepath.Join(tempDir, articleSafeName+".jpg")
 		err = downloadFile(article.Image, coverImagePath)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		htmlPath := filepath.Join(tempDir, articleSafeName + ".html")
+		htmlPath := filepath.Join(tempDir, articleSafeName+".html")
 		htmlFile, err := os.Create(htmlPath)
 		if err != nil {
 			log.Fatal(err)
@@ -115,10 +115,10 @@ func main() {
 
 		err = cmd.Run()
 		if err != nil {
-			log.Fatalf(colorError + "Error converting '%s'" + colorReset + "\n", article.Title)
+			log.Fatalf(colorError+"Error converting '%s'"+colorReset+"\n", article.Title)
 			log.Fatal(err)
 		} else {
-			log.Printf(colorOk + "Successfully converted '%s'" + colorReset + "\n", article.Title)
+			log.Printf(colorOk+"Successfully converted '%s'"+colorReset+"\n", article.Title)
 		}
 	}
 }
