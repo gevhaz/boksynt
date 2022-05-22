@@ -1,7 +1,9 @@
 # boksynt
 
-_boksynt_ is a simple CLI tool for downloading and converting articles to the EPUB format so that they can be put on an
-e-book reader or just read without any clutter and offline in your favorite EPUB reading software.
+_boksynt_ is a simple CLI tool for downloading and converting articles
+to the EPUB format so that they can be put on an e-book reader or just
+read without any clutter and offline in your favorite EPUB reading
+software.
 
 ## Installation
 
@@ -10,8 +12,9 @@ e-book reader or just read without any clutter and offline in your favorite EPUB
 
 ## Requirements
 
-You need to have [pandoc](https://github.com/jgm/pandoc/) installed for _boksynt_ to work. Other dependencies are
-specified in `go.mod` and should be handled automatically.
+You need to have [pandoc](https://github.com/jgm/pandoc/) installed for
+_boksynt_ to work. Other dependencies are specified in `go.mod` and
+should be handled automatically.
 
 ## Usage
 
@@ -31,6 +34,9 @@ The flow is:
 
 ## Development status
 
-This is a work in progress, but the basic functionality is there. Third-party software ([Mozilla
-Readability](https://github.com/mozilla/readability)) handles the actual parsing of websites, so that part should be
-pretty mature.
+This is a work in progress, but the basic functionality is there.
+Third-party software
+[Go-Readability](https://github.com/go-shiori/go-readability) which is a
+Golang port of [Mozilla
+Readability](https://github.com/mozilla/readability) handles the actual
+parsing of websites, so that part should be pretty mature.
