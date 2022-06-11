@@ -25,12 +25,33 @@ The following flags are available:
       Path to file with URLs to articles to be fetched and converted
 -output-dir string
       Directory where the final epub files should be placed (default "current/working/directory/")
+  -tag string
+        Comma separated list of tags that should be added to articles
 ```
 
 The flow is:
 
 1. Create a file with URLs that you want downloaded and converted.
 2. Run the app and provide the path to your file to the `-file` flag.
+
+Running the following:
+
+```
+go run main.go -file urls -output-dir articles -tag "Newspaper articles"
+```
+
+You should get output that looks somewhat like this:
+
+![usage-screenshot](screenshot.png)
+
+If the file `urls` has the following content:
+
+```text
+https://www.theatlantic.com/international/archive/2022/06/young-ukrainians-ukraine-russia-war/661213/
+https://www.theatlantic.com/culture/archive/2022/06/irma-vep-tv-series-review/661230/
+https://theintercept.com/2022/06/09/ice-lexisnexis-mass-surveillances/
+https://www.theguardian.com/australia-news/2022/jun/09/65000-year-old-swiss-army-knife-proves-ancient-humans-shared-knowledge-research-says
+```
 
 ## Development status
 
