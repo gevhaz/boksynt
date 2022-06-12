@@ -73,6 +73,7 @@ func main() {
 		}
 
 		articleSafeName := strings.ReplaceAll(strings.ToLower(article.Title), " ", "_")
+		articleSafeName = strings.ReplaceAll(articleSafeName, "/", "_")
 		epubPath := filepath.Join(outputDir, articleSafeName+".epub")
 
 		if fileExists(epubPath) {
