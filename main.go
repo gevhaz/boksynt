@@ -16,6 +16,18 @@ import (
 	readability "github.com/go-shiori/go-readability"
 )
 
+var file_help string = "Path to file with URLs to articles to be fetched and converted"
+var output_help string = "Directory where the final epub files should be placed"
+var tag_help string = "Comma separated list of tags that should be added to articles"
+var flag_usage string = fmt.Sprintf(`Usage of Boksynt:
+  -f, --file string
+		%s
+  -o, --output-dir string
+		%s
+  -t, --tag string
+		%s
+`, file_help, output_help, tag_help)
+
 func main() {
 	colorError := "\033[31m"
 	colorOk := "\033[32m"
@@ -31,9 +43,13 @@ func main() {
 	var outputDir string
 	var articleTag string
 
-	flag.StringVar(&urlsFilePath, "file", "", "Path to file with URLs to articles to be fetched and converted")
-	flag.StringVar(&outputDir, "output-dir", currentDirectory, "Directory where the final epub files should be placed")
-	flag.StringVar(&articleTag, "tag", "", "Comma separated list of tags that should be added to articles")
+	flag.StringVar(&urlsFilePath, "file", "", file_help)
+	flag.StringVar(&urlsFilePath, "f", "", file_help)
+	flag.StringVar(&outputDir, "output-dir", currentDirectory, output_help)
+	flag.StringVar(&outputDir, "o", currentDirectory, output_help)
+	flag.StringVar(&articleTag, "tag", "", tag_help)
+	flag.StringVar(&articleTag, "t", "", tag_help)
+	flag.Usage = func() { fmt.Print(flag_usage) }
 
 	flag.Parse()
 
