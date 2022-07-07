@@ -86,6 +86,10 @@ func main() {
 		if err != nil {
 			log.Fatalf("Failed to parse url: %s\n%v\n", url, err)
 			continue
+		} else if len(article.Content) < 200 {
+			log.Print(colorWarning + "Downloaded content is shorter than 200 characters so the page probably was not parsed properly:" + colorReset)
+			log.Print(colorWarning + "URL: " + url + colorReset)
+			continue
 		}
 
 		articleSafeName := strings.ReplaceAll(strings.ToLower(article.Title), " ", "_")
