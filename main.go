@@ -98,9 +98,11 @@ func main() {
 		}
 
 		coverImagePath := filepath.Join(tempDir, articleSafeName+".jpg")
-		err = downloadFile(article.Image, coverImagePath)
-		if err != nil {
-			log.Fatal(err)
+		if article.Image != "" {
+			err = downloadFile(article.Image, coverImagePath)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		htmlPath := filepath.Join(tempDir, articleSafeName+".html")
@@ -129,6 +131,25 @@ func main() {
 			coverImagePath,
 			htmlPath,
 		)
+
+		if len(article.Image) == 0 {
+			cmd = exec.Command(
+				"pandoc",
+				"-f",
+				"html",
+				"-t",
+				"epub",
+				"-o",
+				epubPath,
+				"--metadata",
+				fmt.Sprintf("title: %s", article.Title),
+				"--metadata",
+				fmt.Sprintf("author: %s", article.Byline),
+				"--metadata",
+				fmt.Sprintf("subject: %s", articleTag),
+				htmlPath,
+			)
+		}
 
 		err = cmd.Run()
 		if err != nil {
