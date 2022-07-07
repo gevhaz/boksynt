@@ -7,37 +7,45 @@ software.
 
 ## Installation
 
-1. Clone this repo.
-2. You can immediately use it with `go run main.go`.
+To use the latest release:
+
+1. Dowload the latest binary release from GitHub and run it directly
+   with `./boksynt` or put it in your PATH so you can run `boksynt` from
+   anywhere.
+2. To use the latest development version:
+    1. Clone this repo.
+    2. You can immediately use it with `go run main.go`.
 
 ## Requirements
 
 You need to have [pandoc](https://github.com/jgm/pandoc/) installed for
 _boksynt_ to work. Other dependencies are specified in `go.mod` and
-should be handled automatically.
+should be handled automatically if you're running boksynt from the
+cloned repo.
 
 ## Usage
 
 The following flags are available:
 
 ```
--file string
-      Path to file with URLs to articles to be fetched and converted
--output-dir string
-      Directory where the final epub files should be placed (default "current/working/directory/")
-  -tag string
-        Comma separated list of tags that should be added to articles
+Usage of Boksynt:
+  -f, --file string
+                Path to file with URLs to articles to be fetched and converted
+  -o, --output-dir string
+                Directory where the final epub files should be placed
+  -t, --tag string
+                Comma separated list of tags that should be added to articles
 ```
 
 The flow is:
 
 1. Create a file with URLs that you want downloaded and converted.
-2. Run the app and provide the path to your file to the `-file` flag.
+2. Run the app and provide the path to your file to the `--file` flag.
 
 Running the following:
 
 ```
-go run main.go -file urls -output-dir articles -tag "Newspaper articles"
+boksynt --file urls --output-dir articles --tag "Newspaper articles"
 ```
 
 You should get output that looks somewhat like this:
