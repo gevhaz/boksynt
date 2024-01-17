@@ -1,0 +1,5 @@
+personal_ws-1.1 en 1000 utf-8
+CLI
+EPUB
+Pandoc
+boksynt

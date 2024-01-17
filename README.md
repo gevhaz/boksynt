@@ -9,19 +9,19 @@ software.
 
 To use the latest release:
 
-1. Dowload the latest binary release from GitHub and run it directly
+1. Download the latest binary release from GitHub and run it directly
    with `./boksynt` or put it in your PATH so you can run `boksynt` from
    anywhere.
 2. To use the latest development version:
-    1. Clone this repo.
+    1. Clone this repository.
     2. You can immediately use it with `go run main.go`.
 
 ## Requirements
 
-You need to have [pandoc](https://github.com/jgm/pandoc/) installed for
+You need to have [Pandoc](https://github.com/jgm/pandoc/) installed for
 _boksynt_ to work. Other dependencies are specified in `go.mod` and
 should be handled automatically if you're running boksynt from the
-cloned repo.
+cloned repository.
 
 ## Usage
 
@@ -66,6 +66,6 @@ https://www.theguardian.com/australia-news/2022/jun/09/65000-year-old-swiss-army
 This is a work in progress, but the basic functionality is there.
 Third-party software
 [Go-Readability](https://github.com/go-shiori/go-readability) which is a
-Golang port of [Mozilla
+Go port of [Mozilla
 Readability](https://github.com/mozilla/readability) handles the actual
 parsing of websites, so that part should be pretty mature.
